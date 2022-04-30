@@ -5,7 +5,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 const HeaderCartButton = (props) => {
   return (
-    <button className={classes.button}>
+    <button className={classes.button} onClick={props.showCartHandler}>
       <span>
         <FontAwesomeIcon className={classes.icon} icon={faCartShopping} />
       </span>
