@@ -1,13 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
+import CartContext from "../../store/cart-context";
+import CartItem from "./CartItem.jsx";
 
 const Cart = (props) => {
-  const items = [{ id: "c1", name: "Sushi", description: "Delicious Sushi" }];
+  const cartCtx = useContext(CartContext);
+
+  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+
+  const hasItem = cartCtx.items.length > 0;
+
+  const addToCartHandler = (item) => {};
+
+  const removeFromCartHandler = (id) => {};
+
+  // cart state context ကလာတဲ့ items array ကို loop ပြီး cart item တွေကို ပြပေးတာပါ
   const cartItems = (
     <ul className={classes["cart-items"]}>
-      {items.map((item) => (
-        <li>{item.name}</li>
+      {cartCtx.items.map((item) => (
+        <CartItem
+          key={item.id}
+          name={item.name}
+          price={item.price}
+          amount={item.amount}
+          onAdd={addToCartHandler.bind(null, item)}
+          onRemove={removeFromCartHandler.bind(null, item.id)}
+        >
+          {item.name}
+        </CartItem>
       ))}
     </ul>
   );
@@ -17,14 +38,14 @@ const Cart = (props) => {
 
       <div className={classes.total}>
         <span>Total</span>
-        <spane>35.99</spane>
+        <span>{totalAmount}</span>
       </div>
 
       <div className={classes.actions}>
         <button onClick={props.onHideCart} className={classes["button--alt"]}>
           Cancel
         </button>
-        <button>Order</button>
+        {hasItem && <button>Order</button>}
       </div>
     </Modal>
   );
