@@ -8,13 +8,29 @@ const cartItemDefaultValue = {
 
 const cartReducer = (state, action) => {
   if (action.payload === "ADD") {
-    // latest item state ကို အသစ်ဝင်လာတဲ့ item နဲ့ပေါင်းပြီး updated array အသစ်တစ်ခုထုတ်တာပါ
-    const updatedCartItems = state.items.concat(action.item);
-
-    // စုစုပေါင်း ငွေကို ရချင်လို့ latest total amount နဲ့ အသစ်ဝင်လာတဲ့ item ရဲ့ price နဲ့ amount နဲ့ မြောက်တာပါ
+    // စုစုပေါင်း ငွေကို ရချင်လို့ latest total amount နဲ့ အသစ်ဝင်လာတဲ့ item ရဲ့ တန်ဖိုး နဲ့ အရေအတွက်ကို မြောက်တာပါ
     const updatedTotalAmount =
-      state.totalAmount + action.item.price * action.item.amount;
+      state.totalAmount + action.item.price * action.item.quantity;
 
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+
+    const existingCartItem = state.items[existingCartItemIndex];
+
+    let updatedCartItems;
+
+    if (existingCartItem) {
+      const updatedCartItem = {
+        ...existingCartItem,
+        quantity: existingCartItem.quantity + action.item.quantity,
+      };
+
+      updatedCartItems = [...state.items];
+      updatedCartItems[existingCartItemIndex] = updatedCartItem;
+    } else {
+      updatedCartItems = state.items.concat(action.items);
+    }
     return { items: updatedCartItems, totalAmount: updatedTotalAmount };
   }
   return cartItemDefaultValue;

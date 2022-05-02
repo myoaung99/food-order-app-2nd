@@ -3,30 +3,30 @@ import classes from "./MealsItemForm.module.css";
 import Input from "../../UI/Input";
 
 const MealsItemForm = (props) => {
-  const [amountIsValid, setAmountIsValid] = useState(true);
+  const [quantityIsValid, setQuantityIsValid] = useState(true);
 
-  const amountRef = useRef(null);
+  const quantityRef = useRef(null);
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const enteredAmount = amountRef.current.value;
-    const enteredAmountNumber = +enteredAmount;
+    const enteredQuantity = quantityRef.current.value;
+    const enteredQuantityNumber = +enteredQuantity;
 
     if (
-      enteredAmount.trim().length === "0" ||
-      enteredAmountNumber < 1 ||
-      enteredAmountNumber > 5
+      enteredQuantity.trim().length === "0" ||
+      enteredQuantityNumber < 1 ||
+      enteredQuantityNumber > 5
     ) {
-      setAmountIsValid(false);
+      setQuantityIsValid(false);
     }
 
-    props.onAddToCart(enteredAmountNumber);
+    props.onAddToCart(enteredQuantityNumber);
   };
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <Input
-        ref={amountRef}
+        ref={quantityRef}
         label="Amount"
         input={{
           id: "amount_" + props.id,
@@ -38,7 +38,7 @@ const MealsItemForm = (props) => {
         }}
       />
       <button>+ Add</button>
-      {!amountIsValid && <p>Amount must be between 1-5.</p>}
+      {!quantityIsValid && <p>Amount must be between 1-5.</p>}
     </form>
   );
 };
