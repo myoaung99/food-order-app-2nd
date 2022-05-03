@@ -11,9 +11,13 @@ const Cart = (props) => {
 
   const hasItem = cartCtx.items.length > 0;
 
-  const addToCartHandler = (item) => {};
+  const addToCartHandler = (item) => {
+    cartCtx.addItem({ ...item, quantity: 1 });
+  };
 
-  const removeFromCartHandler = (id) => {};
+  const removeFromCartHandler = (id) => {
+    cartCtx.removeItem(id);
+  };
 
   // cart state context ကလာတဲ့ items array ကို loop ပြီး cart item တွေကို ပြပေးတာပါ
   const cartItems = (

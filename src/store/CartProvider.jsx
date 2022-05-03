@@ -29,10 +29,37 @@ const cartReducer = (state, action) => {
       updatedCartItems = [...state.items];
       updatedCartItems[existingCartItemIndex] = updatedCartItem;
     } else {
-      updatedCartItems = state.items.concat(action.items);
+      updatedCartItems = state.items.concat(action.item);
     }
     return { items: updatedCartItems, totalAmount: updatedTotalAmount };
   }
+
+  if (action.payload === "REMOVE") {
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.id
+    );
+
+    const existingCartItem = state.items[existingCartItemIndex];
+
+    const updatedTotalAmount = state.totalAmount - existingCartItem.price;
+
+    let updatedCartItems;
+
+    if (existingCartItem.quantity === 1) {
+      updatedCartItems = state.items.filter((item) => item.id !== action.id);
+    } else {
+      const updatedCartItem = {
+        ...existingCartItem,
+        quantity: existingCartItem.quantity - 1,
+      };
+
+      updatedCartItems = [...state.items];
+      updatedCartItems[existingCartItemIndex] = updatedCartItem;
+    }
+
+    return { items: updatedCartItems, totalAmount: updatedTotalAmount };
+  }
+
   return cartItemDefaultValue;
 };
 
@@ -53,12 +80,14 @@ const CartProvider = (props) => {
     dispatchCartAction({ payload: "REMOVE", id });
   };
 
+  // context value
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
   };
+
   return (
     <CartContext.Provider value={cartContext}>
       {props.children}
